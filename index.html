@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Interval Timer</title>
+  <meta name="theme-color" content="#f5435e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Interval Timer">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ========== 主畫面 ========== -->
+  <main id="home" class="screen active">
+    <header class="hero">
+      <div class="topbar">
+        <button class="icon-btn" id="menuBtn" aria-label="選單">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <h1>Interval Timer</h1>
+        <span class="icon-btn spacer"></span>
+      </div>
+      <div class="total">
+        <div class="total-label">總時間</div>
+        <div class="total-time" id="totalTime">05:45</div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <button class="play-btn" id="startBtn" aria-label="開始">
+        <svg viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+      </button>
+
+      <div class="rows">
+        <button class="row row-load" id="loadBtn">
+          <svg class="row-icon" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+          <span class="row-label">載入先前的訓練</span>
+          <svg class="row-chev" viewBox="0 0 24 24"><path d="M6 7l5 5-5 5M13 7l5 5-5 5"/></svg>
+        </button>
+
+        <button class="row row-work" data-field="work">
+          <svg class="row-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path class="fill" d="M10 8.5v7l5.5-3.5z"/></svg>
+          <span class="row-label">運動</span>
+          <span class="row-value" data-value="work">00:30</span>
+        </button>
+
+        <button class="row row-rest" data-field="rest">
+          <svg class="row-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/></svg>
+          <span class="row-label">休息</span>
+          <span class="row-value" data-value="rest">00:15</span>
+        </button>
+
+        <button class="row row-ex" data-field="exercises">
+          <svg class="row-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M13 6.5L8.5 13H12l-1 4.5 4.5-6.5H12z"/></svg>
+          <span class="row-label">動作數</span>
+          <span class="row-value" data-value="exercises">8</span>
+        </button>
+
+        <button class="row row-rounds" data-field="rounds">
+          <svg class="row-icon" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4v4.5H15"/></svg>
+          <span class="row-label">組數</span>
+          <span class="row-value" data-value="rounds">1X</span>
+        </button>
+
+        <button class="row row-reset" data-field="reset">
+          <svg class="row-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.5h4"/></svg>
+          <span class="row-label">組間休息</span>
+          <span class="row-value" data-value="reset">00:10</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== 計時畫面 ========== -->
+  <section id="run" class="screen run" data-phase="work">
+    <div class="run-top">
+      <button class="icon-btn" id="stopBtn" aria-label="結束">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="run-meta">
+        <span id="runExercise">動作 1/8</span>
+        <span class="dot">•</span>
+        <span id="runRound">第 1/1 組</span>
+      </div>
+      <div class="run-remaining" id="runRemaining">剩餘 05:45</div>
+    </div>
+
+    <div class="run-center">
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 200 200">
+          <circle class="ring-bg" cx="100" cy="100" r="92"/>
+          <circle class="ring-fg" id="ringFg" cx="100" cy="100" r="92"/>
+        </svg>
+        <div class="ring-text">
+          <div class="phase" id="runPhase">運動</div>
+          <div class="clock" id="runClock">00:30</div>
+          <div class="next" id="runNext">下一個：休息 00:15</div>
+          <div class="paused-tag" id="pausedTag">已暫停</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="run-controls">
+      <button class="ctrl" id="prevBtn" aria-label="上一段">
+        <svg viewBox="0 0 24 24"><path d="M6 5v14"/><path class="fill" d="M19 5.5v13L9 12z"/></svg>
+      </button>
+      <button class="ctrl ctrl-main" id="pauseBtn" aria-label="暫停">
+        <svg class="i-pause" viewBox="0 0 24 24"><rect class="fill" x="6.5" y="5" width="4" height="14" rx="1"/><rect class="fill" x="13.5" y="5" width="4" height="14" rx="1"/></svg>
+        <svg class="i-play" viewBox="0 0 24 24"><path class="fill" d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+      </button>
+      <button class="ctrl" id="nextBtn" aria-label="下一段">
+        <svg viewBox="0 0 24 24"><path d="M18 5v14"/><path class="fill" d="M5 5.5v13L15 12z"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ========== 完成畫面 ========== -->
+  <section id="done" class="screen done">
+    <div class="done-inner">
+      <div class="done-emoji">🎉</div>
+      <h2>訓練完成！</h2>
+      <p id="doneSummary">8 個動作 × 1 組，共 05:45</p>
+      <div class="done-actions">
+        <button class="btn btn-light" id="againBtn">再來一次</button>
+        <button class="btn btn-ghost" id="homeBtn">回主畫面</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 底部面板（編輯 / 載入） ========== -->
+  <div class="backdrop" id="backdrop"></div>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true">
+    <div class="sheet-head">
+      <button class="sheet-btn" id="sheetCancel">取消</button>
+      <h3 id="sheetTitle">運動</h3>
+      <button class="sheet-btn strong" id="sheetDone">完成</button>
+    </div>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+
+  <!-- ========== 側邊選單 ========== -->
+  <aside class="drawer" id="drawer">
+    <div class="drawer-head">
+      <h3>選單</h3>
+      <button class="icon-btn dark" id="drawerClose" aria-label="關閉">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <button class="drawer-item" id="saveBtn">💾　儲存目前的訓練</button>
+    <button class="drawer-item" id="openLoadBtn">📅　我的訓練</button>
+    <div class="drawer-sep">設定</div>
+    <button class="drawer-item" id="prepBtn">⏱　準備倒數<span class="drawer-val" id="prepVal">5 秒</span></button>
+    <label class="drawer-item toggle">🔔　提示音<input type="checkbox" id="soundToggle"><span class="switch"></span></label>
+    <label class="drawer-item toggle">🗣　語音播報<input type="checkbox" id="voiceToggle"><span class="switch"></span></label>
+    <p class="drawer-note">計時中會自動保持螢幕開啟。建議從 Safari「分享 → 加入主畫面」安裝，即可像 App 一樣全螢幕使用、離線也能用。</p>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
